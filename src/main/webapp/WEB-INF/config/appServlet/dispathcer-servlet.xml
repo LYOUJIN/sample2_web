@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:annotation-driven/>
+
+	<context:component-scan base-package="com.sample.web" />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- properties file -->
+	<bean id="PropertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath*:/props/application.properties" />
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/view directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+	</bean>
+
+	<!-- jsonview 설정 -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" id="viewResolver">
+		<property name="order" value="0" />
+	</bean>
+	<bean id="jsonView" class="net.sf.json.spring.web.servlet.view.JsonView">
+		<property name="contentType" value="application/json;charset=UTF-8" />
+	</bean>
+
+	<!-- RestTemplate t설정 -->
+	<bean class="org.springframework.web.client.RestTemplate">
+		<constructor-arg>
+			<bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+				<property name="readTimeout" value="2000"></property>
+				<property name="connectTimeout" value="2000"></property>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!--<mvc:interceptors>
+		<beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<beans:property name="paramName" value="lang" />
+		</beans:bean>
+
+		<mvc:interceptor>
+			&lt;!&ndash; 세션 체크 path &ndash;&gt;
+			<mvc:mapping path="/**"/>
+			&lt;!&ndash; 세션 체크 예외 path&ndash;&gt;
+			<mvc:exclude-mapping path="/"/>
+			<mvc:exclude-mapping path="/doLogin.json"/>
+			<mvc:exclude-mapping path="/common/loginConfirm.json"/>
+			<mvc:exclude-mapping path="/common/updatePwdPeriod.json"/>
+			<mvc:exclude-mapping path="/common/smsAddAuthConfirm.json"/>
+			<mvc:exclude-mapping path="/login.do"/>
+			<mvc:exclude-mapping path="/logout.do"/>
+			<mvc:exclude-mapping path="/error/404.do"/>
+			<mvc:exclude-mapping path="/error/500.do"/>
+			<mvc:exclude-mapping path="/file/*"/>
+			<beans:bean class="com.lotte.cps.common.util.LoginCheckInterceptor" />
+		</mvc:interceptor>
+
+	</mvc:interceptors>
+-->
+</beans>
